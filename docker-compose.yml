@@ -9,7 +9,7 @@ services:
             - ./nginx/conf.d:/etc/nginx/conf.d 
         ports:
             - "80:80" 
-            - “443:443"
+            - "443:443"
         #etworks: #网络限制，于php在同一个网络里，只能访问php
         #    - frontend
         depends_on: #依赖于php
