@@ -1,0 +1,56 @@
+version: '2'
+services:
+    nginx:
+        image: nginx:1.12
+        container_name: nginx 
+        working_dir: /application #容器里的工作目录，也可与自己的应用重名。
+        volumes:
+            - ./www:/application # 将本地代码挂载到容器的application目录里
+            - ./nginx/conf.d:/etc/nginx/conf.d 
+        ports:
+            - "80:80" 
+            - “443:443"
+        #etworks: #网络限制，于php在同一个网络里，只能访问php
+        #    - frontend
+        depends_on: #依赖于php
+            - php
+        restart: always
+    php:
+        image: "gaohongxiang/lnmp-php:php7.2" # 使用自己配置的镜像文件
+       #注意：php镜像上传到了docker hub上，image直接去pull此镜像。等同于下面的build句（指定php dockerfile所在的目录）。用哪一个都可以
+       # build: ./php
+        container_name: php
+        working_dir: /application
+        volumes:
+            - ./www:/application 
+            - ./php/php.ini:/etc/php/php.ini
+        #networks: #加入了两个网络组，既可以与nginx通信，又可以与mysql通信。
+        #    - frontend
+        #    - backend
+        environment:
+            - MYSQL_PASSWORD=1
+        depends_on: # 依赖于mysql
+            - mysql
+        restart: always
+    mysql:
+        image: mysql:5.7
+        container_name: mysql
+        working_dir: /application
+        volumes:
+            - ./mysql/data:/var/lib/mysql #mysql数据在本机相对当前目录的mysql/data目录下，挂载在容器里/var/lib/mysql目录下
+            - ./mysql/mysql.conf:/etc/mysql/mysql.conf.d/mysql.cnf #mysql目录下的mysql.conf文件挂载到容器的/etc/mysql/mysql.conf.d/mysql.cnf文件上。相当于吧mysql.conf文件里的内容写入容器的mysql.cnf文件里
+        environment:
+            - TZ='Asia/Shanghai'
+            - MYSQL_USER=root
+            - MYSQL_ROOT_PASSWORD=1
+            - MYSQL_PASSWORD=1
+            - MYSQL_DATABASE=www_blockchant_cn 
+        # networks:
+        #    - backend
+        restart: always
+#volumes:
+#    mysql-data:
+
+# networks: # 自定义的网络组
+#    frontend:
+#    backend:
