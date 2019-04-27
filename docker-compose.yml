@@ -27,27 +27,27 @@ services:
         #networks: #加入了两个网络组，既可以与nginx通信，又可以与mysql通信。
         #    - frontend
         #    - backend
-        environment:
-            - MYSQL_PASSWORD=1
-        depends_on: # 依赖于mysql
-            - mysql
+        # environment:
+        #     - MYSQL_PASSWORD=1
+        # depends_on: # 依赖于mysql
+        #     - mysql
         restart: always
-    mysql:
-        image: mysql:5.7
-        container_name: mysql
-        working_dir: /application
-        volumes:
-            - ./mysql/data:/var/lib/mysql #mysql数据在本机相对当前目录的mysql/data目录下，挂载在容器里/var/lib/mysql目录下
-            - ./mysql/mysql.conf:/etc/mysql/mysql.conf.d/mysql.cnf #mysql目录下的mysql.conf文件挂载到容器的/etc/mysql/mysql.conf.d/mysql.cnf文件上。相当于吧mysql.conf文件里的内容写入容器的mysql.cnf文件里
-        environment:
-            - TZ='Asia/Shanghai'
-            - MYSQL_USER=root
-            - MYSQL_ROOT_PASSWORD=1
-            - MYSQL_PASSWORD=1
-            - MYSQL_DATABASE=www_blockchant_cn 
-        # networks:
-        #    - backend
-        restart: always
+    # mysql:
+    #     image: mysql:5.7
+    #     container_name: mysql
+    #     working_dir: /application
+    #     volumes:
+    #         - ./mysql/data:/var/lib/mysql #mysql数据在本机相对当前目录的mysql/data目录下，挂载在容器里/var/lib/mysql目录下
+    #         - ./mysql/mysql.conf:/etc/mysql/mysql.conf.d/mysql.cnf #mysql目录下的mysql.conf文件挂载到容器的/etc/mysql/mysql.conf.d/mysql.cnf文件上。相当于吧mysql.conf文件里的内容写入容器的mysql.cnf文件里
+    #     environment:
+    #         - TZ='Asia/Shanghai'
+    #         - MYSQL_USER=root
+    #         - MYSQL_ROOT_PASSWORD=1
+    #         - MYSQL_PASSWORD=1
+    #         - MYSQL_DATABASE=www_blockchant_cn 
+    #     # networks:
+    #     #    - backend
+    #     restart: always
 #volumes:
 #    mysql-data:
 
